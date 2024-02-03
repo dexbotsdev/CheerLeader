@@ -1,32 +1,27 @@
-import { createUmi } from "@metaplex-foundation/umi-bundle-defaults";
-import { mplTokenMetadata, createV1, TokenStandard, mintV1, createAndMint, AuthorityType } from "@metaplex-foundation/mpl-token-metadata";
-import { keypairIdentity, generateSigner, percentAmount, signerIdentity, signerPayer, createSignerFromKeypair } from "@metaplex-foundation/umi";
-import * as readline from "readline"
-import * as util from "util"
-import * as process from "process"
-import { connection, privateKey, tokenInfo } from '../config';
-import { uploadImageLogo } from "./web3utils";
-import { Keypair, PublicKey, SystemProgram, Transaction, TransactionInstruction, Signer, Connection } from '@solana/web3.js';
-import { DEFAULT_TOKEN, OPENBOOK_DEX, OPENBOOK_DEX_DEVNET, PROGRAMIDS, SERUM_DEX_V3_DEVNET, TransactionWithSigners } from './constants';
-import { getVaultOwnerAndNonce } from "./serum";
-import { ACCOUNT_SIZE, TOKEN_PROGRAM_ID, createInitializeAccountInstruction } from "@solana/spl-token";
+import { connection, privateKey, NFT_STORAGE_TOKEN, tokenInfo, RPC_URL } from "./config";
+import { Connection, Keypair, PublicKey, SystemProgram, Transaction, TransactionInstruction } from "@solana/web3.js";
+import { Metaplex, keypairIdentity, toBigNumber, irysStorage, token } from "@metaplex-foundation/js";
+import { METAPLEX, SOL, metadata, revokeFreezeAuthority, revokeMintAuthority, umi, uploadImage, userWallet, userWalletSigner } from "./src/web3utils";
+import { CandyMachine } from "@metaplex-foundation/mpl-candy-machine";
+import { generateSigner, percentAmount, signerIdentity } from "@metaplex-foundation/umi";
+import { DEFAULT_TOKEN, PROGRAMIDS, TransactionWithSigners, wallet } from "./src/constants";
+import { TokenStandard, createAndMint, mplTokenMetadata } from "@metaplex-foundation/mpl-token-metadata";
+import { ACCOUNT_SIZE, TOKEN_PROGRAM_ID, createInitializeAccountInstruction, createMint, mintTo } from '@solana/spl-token';
+import { readFile, writeFile } from "fs";
+import { getVaultOwnerAndNonce } from "./src/serum";
+import { sendSignedTransaction, signTransactions } from "./src/utils";
+import { BN } from "@project-serum/anchor";
 import { DexInstructions, Market } from "@project-serum/serum";
-import BN from "bn.js";
-import { sendSignedTransaction, signTransactions, sleep } from "./utils";
-import NodeWallet from "@project-serum/anchor/dist/cjs/nodewallet";
-import { web3 } from "@project-serum/anchor";
-import {
-    sendAndConfirmTransaction,
-} from "@solana/web3.js";
-import * as splToken from "@solana/spl-token";
-import { setAuthority } from "@project-serum/serum/lib/token-instructions";
- import { ASSOCIATED_PROGRAM_ID } from "@project-serum/anchor/dist/cjs/utils/token";
-import { createTokenPool } from "./createPool";
-import { MAINNET_PROGRAM_ID, Token } from "@raydium-io/raydium-sdk";
-import { PathOrFileDescriptor, readFileSync } from "fs";
-import axios from "axios";
-import { metadata } from "./web3utils";
+import { Token } from "@raydium-io/raydium-sdk";
 
+let baseMint: PublicKey;
+let baseMintDecimals: number;
+let quoteMint: PublicKey;
+let quoteMintDecimals: number;
+const vaultInstructions: TransactionInstruction[] = [];
+const vaultSigners: Keypair[] = [];
+const marketInstructions: TransactionInstruction[] = [];
+const marketSigners: Keypair[] = [];
 
 const totalEventQueueSize = 11308
 const totalRequestQueueSize = 844
@@ -47,67 +42,15 @@ const TRANSACTION_MESSAGES = [
 ];
 const programID = new PublicKey(PROGRAMIDS.OPENBOOK_MARKET);
 
-const SOL = 'So11111111111111111111111111111111111111112';
+async function start() {
 
-const umi = createUmi(tokenInfo.devnet?'https://api.devnet.solana.com':'https://api.mainnet-beta.solana.com');
-
-const keypair = umi.eddsa.createKeypairFromSecretKey(privateKey.secretKey);
-
-const wallet = new NodeWallet(privateKey);
-
-
-
-umi.use(keypairIdentity(keypair)).use(mplTokenMetadata())
-
-
-const mint = generateSigner(umi);
-
-async function createMyToken() {
-
-
-    let totalSupply = 100;
-
-    totalSupply = totalSupply- tokenInfo.addLP;
-
-    tokenInfo.transfers.forEach((item)=>{
-        totalSupply = totalSupply-item.partnerShare;
-    })
-
-    if(totalSupply<0){
-        console.log('Partner Share + Liquidity Amounts exceeds 100%');
-
-        return;
-    }
-
-    console.log(metadata);
-
-    await createAndMint(umi, {
-        mint,
-        authority: umi.identity,
-        name: metadata.name,
-        symbol: metadata.symbol,
-        uri: metadata.uri,
-        sellerFeeBasisPoints: percentAmount(0),
-        decimals: tokenInfo.decimals,
-        amount: Number(tokenInfo.supply) * 10 ** tokenInfo.decimals,
-        tokenOwner: umi.identity.publicKey,
-        tokenStandard: TokenStandard.Fungible,
-    }).sendAndConfirm(umi).then(async () => {
-        console.log(`\nSuccessfully minted ${tokenInfo.supply} ${tokenInfo.symbol}\nToken Address: ${mint.publicKey}\n`);
-
-        let baseMint: PublicKey;
-        let baseMintDecimals: number;
-
-        let quoteMint: PublicKey;
-        let quoteMintDecimals: number;
-        const vaultInstructions: TransactionInstruction[] = [];
-        const vaultSigners: Keypair[] = [];
-
-        const marketInstructions: TransactionInstruction[] = [];
-        const marketSigners: Keypair[] = [];
-
-
-        baseMint = new PublicKey(mint.publicKey);
+    readFile('./tokenInfo.json', 'utf8', async (error, data) => {
+        if (error) {
+            //logger.debug(error);
+            return;
+        }
+        let tokenInfo = JSON.parse(data);
+        baseMint = new PublicKey(tokenInfo.baseMint);
         baseMintDecimals = tokenInfo.decimals;
         quoteMint = new PublicKey(SOL);
         quoteMintDecimals = 9;
@@ -127,7 +70,6 @@ async function createMyToken() {
             marketAccounts.market.publicKey,
             programID
         );
-
         // create vaults
         vaultInstructions.push(
             ...[
@@ -166,16 +108,17 @@ async function createMyToken() {
 
         // tickSize and lotSize here are the 1e^(-x) values, so no check for ><= 0
         const baseLotSize = Math.round(
-            10 ** baseMintDecimals * Math.pow(10, -1 * 6)
+            10 ** baseMintDecimals * Math.pow(10, -1 * baseMintDecimals)
         );
         const quoteLotSize = Math.round(
             10 ** quoteMintDecimals *
-            Math.pow(10, -1 * 6) *
+            Math.pow(10, -1 * baseMintDecimals) *
             Math.pow(10, -1 * -2)
         );
 
-        // create market account
-        marketInstructions.push(
+
+           // create market account
+           marketInstructions.push(
             SystemProgram.createAccount({
                 newAccountPubkey: marketAccounts.market.publicKey,
                 fromPubkey: privateKey.publicKey,
@@ -213,8 +156,7 @@ async function createMyToken() {
             })
         );
 
-        const orderBookRentExempt =
-            await connection.getMinimumBalanceForRentExemption(totalOrderbookSize);
+        const orderBookRentExempt = await connection.getMinimumBalanceForRentExemption(totalOrderbookSize);
 
         // create bids
         marketInstructions.push(
@@ -352,167 +294,30 @@ async function createMyToken() {
             console.log(`BASE MINT -     ${baseMint.toBase58()}`)
             console.log(`QUOTE MINT -     ${quoteMint.toBase58()}`)
             console.log(`SUPPLY  -     ${metadata.tokenSupply}`)
+            const tokenPoolInfo ={
+                baseMint: new Token(TOKEN_PROGRAM_ID, baseMint, tokenInfo.decimals, tokenInfo.tokenName, tokenInfo.symbol),
+                quoteMint:DEFAULT_TOKEN.SOL,
+                baseMintAmount: (0.01)*tokenInfo.addLP*Number(tokenInfo.supply)* 10 ** tokenInfo.decimals,
+                quoteMintAmount: tokenInfo.addSol* 10 ** 9,
+                marketId:marketAccounts.market.publicKey
+              }
 
-            // console.log(`TRANSFERRING TOKEN SHARES TO PARTNERS -     `)
-
-            // const tokenAccount = await splToken.getAssociatedTokenAddress(
-            //     baseMint,
-            //     privateKey.publicKey
-            // )
-            // console.log(`associated token account is  -     ` + tokenAccount)
-
-            // tokenInfo.transfers.forEach(async (transfer) => {
-            //     let transfers = new Transaction();
-
-            //     let destTokenAccount = await splToken.getAssociatedTokenAddress(
-            //         baseMint,
-            //         new PublicKey(transfer.partnerId)
-            //     )
-
-            //     const receiverAccount = await connection.getAccountInfo(
-            //         destTokenAccount
-            //     )
-
-            //     if (receiverAccount === null) {
-            //         transfers.add(
-            //             splToken.createAssociatedTokenAccountInstruction(
-            //                 privateKey.publicKey,
-            //                 destTokenAccount,
-            //                 new PublicKey(transfer.partnerId),
-            //                 baseMint,
-            //                 TOKEN_PROGRAM_ID,
-            //                 splToken.ASSOCIATED_TOKEN_PROGRAM_ID
-            //             )
-            //         )
-            //     } 
-            //     const transferAmount = (0.01)*transfer.partnerShare*Number(tokenInfo.supply)**10*(tokenInfo.decimals);
-            //     transfers.add(
-            //         splToken.createTransferInstruction(
-            //             tokenAccount,
-            //           destTokenAccount,
-            //           privateKey.publicKey,
-            //           transferAmount
-            //         )
-            //       )
-            //     const tfrtransactionId = await sendAndConfirmTransaction(
-            //         connection,
-            //         transfers,
-            //         [privateKey]
-            //     );
-            //     console.log(`TRANSFERRED PARTNER TOKENS  -     ` + tfrtransactionId)
-
-            // })
-
-
-
-            let authorityTransaction = new Transaction().add(
-                splToken.createSetAuthorityInstruction(
-                    baseMint, // mint acocunt || token account
-                    privateKey.publicKey,
-                    splToken.AuthorityType.MintTokens,
-                    null,
-                    [],
-                    TOKEN_PROGRAM_ID
-                )
-            );
-            console.log(`REVOKING MINT AUTHORITY  -     `)
-
-
-            const transactionId = await sendAndConfirmTransaction(
-                connection,
-                authorityTransaction,
-                [privateKey]
-            ).catch((error)=>{
-                console.log(error)
-            })
-
-            console.log(`REVOKED MINT AUTHORITY  -     ` + transactionId)
-
-
-            let revokeTransaction = new Transaction().add(
-                splToken.createSetAuthorityInstruction(
-                    baseMint, // mint acocunt || token account
-                    privateKey.publicKey,
-                    splToken.AuthorityType.FreezeAccount,
-                    null,
-                    [],
-                    TOKEN_PROGRAM_ID
-                )
-            );
-            console.log(`REVOKING FREEZE AUTHORITY  -     `)
-
-
-            const revokeTransactionId = await sendAndConfirmTransaction(
-                connection,
-                revokeTransaction,
-                [privateKey]
-            ).catch((error)=>{
-                console.log(error)
-            })
-
-            console.log(`REVOKED FREEZE AUTHORITY  -     ` + revokeTransactionId)
-
-
-           console.log(`Creating Pool  -     `  )
-
-          const tokenPoolInfo ={
-            baseMint: new Token(TOKEN_PROGRAM_ID, baseMint, tokenInfo.decimals, tokenInfo.tokenName, tokenInfo.symbol),
-            quoteMint:DEFAULT_TOKEN.SOL,
-            baseMintAmount: (0.01)*tokenInfo.addLP*Number(tokenInfo.supply)* 10 ** tokenInfo.decimals,
-            quoteMintAmount: tokenInfo.addSol* 10 ** 9,
-            marketId:marketAccounts.market.publicKey
-          }
-
-            await createTokenPool(tokenPoolInfo);
-
-            return;
-
+            tokenInfo ={
+                ...tokenInfo,
+                ...tokenPoolInfo
+            }
+            writeFile('./tokenInfo.json',JSON.stringify(tokenInfo), (err) => {
+                if (err) throw err;
+                console.log('The file has been saved! Now run --  npm run createPool');
+              });
 
         } catch (e) {
             console.error("[explorer]: ", e);
 
         }
-
     })
 
 }
 
 
-async function uploadToNFTStorage(filePath: PathOrFileDescriptor) {
-    try {
-      // Read the file content
-      const fileContent = readFileSync(filePath);
-  
-      // Make a POST request to NFT.Storage API
-      const response = await axios.post(`https://api.nft.storage/upload`, fileContent, {
-        headers: {
-          'Content-Type': 'application/octet-stream',
-          'Authorization': `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJkaWQ6ZXRocjoweDAxQzM4ZGVhN0QwQTcxRkIyY0NGOGIzYzliMWVmMDk3Mjc0MUY2ODYiLCJpc3MiOiJuZnQtc3RvcmFnZSIsImlhdCI6MTcwNjg5Mzk3NjkzMCwibmFtZSI6ImpvbyJ9.HkSC0aftzSM9P6LEfAxmrAUG9ojfaU4aSohh3i4Aebw`
-        },
-      });
-  
-      // Print the response
-      console.log('File uploaded successfully. CID:', response.data.value.cid);
-      return response.data.value.cid;
-    } catch (error :any) {
-      console.error('Error uploading file:', error);
-    }
-  }
-
-
-const main = async () => {
-    const imageUri=await uploadToNFTStorage(tokenInfo.image);
-''
-    const uri = await uploadImageLogo(tokenInfo.image, tokenInfo.tokenName, tokenInfo.symbol, tokenInfo.description);
-
-    metadata.uri = uri;
-     
-
-    await createMyToken();
-
-}
-
-
-
-
- main();
+start()

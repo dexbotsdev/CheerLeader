@@ -4,22 +4,26 @@ import {
   Liquidity,
   MAINNET_PROGRAM_ID,
   MARKET_STATE_LAYOUT_V3,
-  TOKEN_PROGRAM_ID,
   Token,
+  TOKEN_PROGRAM_ID,
 } from '@raydium-io/raydium-sdk';
 import {
   Keypair,
   PublicKey,
 } from '@solana/web3.js';
- 
+
+import { 
+  DEFAULT_TOKEN,
+  makeTxVersion, 
+  PROGRAMIDS, 
+  wallet,
+} from './constants';
 import {
   buildAndSendTx,
   getWalletTokenAccount,
 } from './raydiumUtil';
-import { DEFAULT_TOKEN, PROGRAMIDS, RAYDIUMF_PROGRAM_ID, makeTxVersion, wallet } from './constants';
-import { connection, tokenInfo, privateKey } from '../config';
-import assert from 'assert';
- 
+import { connection, privateKey, tokenInfo } from '../config';
+
 const ZERO = new BN(0)
 type BN = typeof ZERO
 
@@ -29,7 +33,7 @@ type CalcStartPrice = {
 }
 
 function calcMarketStartPrice(input: CalcStartPrice) {
-  return input.addBaseAmount.toNumber() / 10 ** (tokenInfo.decimals) / (input.addQuoteAmount.toNumber() / 10 ** 9)
+  return input.addBaseAmount.toNumber() / 10 ** 6 / (input.addQuoteAmount.toNumber() / 10 ** 6)
 }
 
 type LiquidityPairTargetInfo = {
@@ -48,7 +52,7 @@ function getMarketAssociatedPoolKeys(input: LiquidityPairTargetInfo) {
     quoteDecimals: input.quoteToken.decimals,
     marketId: input.targetMarketId,
     programId: PROGRAMIDS.AmmV4,
-    marketProgramId: PROGRAMIDS.OPENBOOK_MARKET,
+    marketProgramId: MAINNET_PROGRAM_ID.OPENBOOK_MARKET,
   })
 }
 
@@ -83,18 +87,19 @@ async function ammCreatePool(input: TestTxInputInfo): Promise<{ txids: string[] 
     associatedOnly: false,
     checkCreateATAOwner: true,
     makeTxVersion,
-    feeDestinationId: input.wallet.publicKey, // only mainnet use this
+    feeDestinationId: new PublicKey('7YttLkHDoNj9wyDur5pM1ejNaAvT9X4eqaYcHQqtj2G5'), // only mainnet use this
   })
 
-  return { txids: await buildAndSendTx(initPoolInstructionResponse.innerTransactions,{skipPreflight:false}) }
+  return { txids: await buildAndSendTx(initPoolInstructionResponse.innerTransactions) }
 }
+
 
 export async function createTokenPool(tokenPoolInfo:any) {
   const baseToken = tokenPoolInfo.baseMint // USDC
   const quoteToken = tokenPoolInfo.quoteMint // RAY
   const targetMarketId = tokenPoolInfo.marketId
-  const addBaseAmount = new BN(10000000000) // 10000 / 10 ** 6,
-  const addQuoteAmount = new BN(100000000) // 10000 / 10 ** 9,
+  const addBaseAmount = new BN(1000000000000) // 10000 / 10 ** 6,
+  const addQuoteAmount = new BN(1000000000) // 10000 / 10 ** 9,
   const startTime = Math.floor(Date.now() / 1000) +5*60 // start from 7 days later
   const walletTokenAccounts = await getWalletTokenAccount(connection, wallet.publicKey)
 
