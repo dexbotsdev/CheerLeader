@@ -60,7 +60,7 @@ async function start() {
             poolKeys,
             userKeys: {
                 tokenAccounts: walletTokenAccounts,
-                owner: wallet.publicKey,
+                owner: mainnetKeyA.publicKey,
             },
             amountIn: amountIn,
             amountOut: new TokenAmount(baseToken,'1',false),
@@ -98,7 +98,7 @@ async function start() {
           const tnxCD =  await buildSimpleTransaction({
             connection,
             makeTxVersion,
-            payer: wallet.publicKey,
+            payer: mainnetKeyA.publicKey,
             innerTransactions: innerTransactions,
             addLookupTableInfo: addLookupTableInfo,
           })
