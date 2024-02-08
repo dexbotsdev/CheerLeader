@@ -1,11 +1,11 @@
 import { connection, privateKey } from "./config";
-import { PublicKey } from "@solana/web3.js";
-import { DEFAULT_TOKEN, PROGRAMIDS, wallet } from "./src/constants";
+import { PublicKey, SendOptions, Transaction, VersionedTransaction } from "@solana/web3.js";
+import { DEFAULT_TOKEN, PROGRAMIDS, addLookupTableInfo, makeTxVersion, wallet } from "./src/constants";
 import { TOKEN_PROGRAM_ID } from '@solana/spl-token';
 import { readFile } from "fs";
-import { Liquidity, MARKET_STATE_LAYOUT_V3, Token } from "@raydium-io/raydium-sdk";
+import { Liquidity, MARKET_STATE_LAYOUT_V3, Market, Percent, Token, TokenAmount, buildSimpleTransaction } from "@raydium-io/raydium-sdk";
 import { BN } from "@project-serum/anchor";
-import { ammCreatePool, calcMarketStartPrice, getWalletTokenAccount } from "./src/raydiumUtil";
+import { ammCreatePool, calcMarketStartPrice, getWalletTokenAccount, sendTx } from "./src/raydiumUtil";
 
 
 async function start() {
@@ -27,9 +27,9 @@ async function start() {
         /* do something with start price if needed */
         const startPrice = calcMarketStartPrice({ addBaseAmount, addQuoteAmount })
         const marketBufferInfo: any = await connection.getAccountInfo(targetMarketId)
-        const { baseMint, quoteMint, baseLotSize, quoteLotSize } = MARKET_STATE_LAYOUT_V3.decode(marketBufferInfo.data)
+        const { baseMint, quoteMint, baseLotSize, quoteLotSize,baseVault,quoteVault,bids,asks,eventQueue } = MARKET_STATE_LAYOUT_V3.decode(marketBufferInfo.data)
         console.log(baseMint.toString(), quoteMint.toString(), baseLotSize.toString(), quoteLotSize.toString());
-        const associatedPoolKeys = Liquidity.getAssociatedPoolKeys({
+        let poolKeys :any = Liquidity.getAssociatedPoolKeys({
             version: 4,
             marketVersion: 3,
             baseMint,
@@ -40,18 +40,42 @@ async function start() {
             programId: PROGRAMIDS.AmmV4,
             marketProgramId: PROGRAMIDS.OPENBOOK_MARKET
         })
-        const { id: ammId, lpMint } = associatedPoolKeys
+        poolKeys.marketBaseVault = baseVault;
+        poolKeys.marketQuoteVault = quoteVault;
+        poolKeys.marketBids = bids;
+        poolKeys.marketAsks = asks;
+        poolKeys.marketEventQueue = eventQueue;
 
-        const isAlreadyInited = Boolean((await connection?.getAccountInfo(new PublicKey(ammId)))?.data.length)
-        console.log(isAlreadyInited ? 'has already init this pool' : 'Creating AMM Pool ')
-        if (isAlreadyInited) {
-            console.log(' Pool Already Exists ');
-            return;
-        }
 
+
+        const slippage = new Percent(1, 100);
+
+        const amountIn = new TokenAmount(quoteToken, "0.1", false);
+
+
+        console.log(' Creating Swap Transactions '+ amountIn.toFixed());
+
+        const { innerTransactions } = await Liquidity.makeSwapInstructionSimple({
+            connection,
+            poolKeys,
+            userKeys: {
+                tokenAccounts: walletTokenAccounts,
+                owner: wallet.publicKey,
+            },
+            amountIn: amountIn,
+            amountOut: new TokenAmount(baseToken,'1',false),
+            fixedSide: 'in',
+            makeTxVersion,
+        });
+ 
         console.log(' Creating new AMM Pool for marketId '+ tokenInfo.marketId);
 
-        ammCreatePool({
+        console.log(' Creating Swap Transactions ');
+
+        console.log( innerTransactions)
+
+        
+      const innerTransactionInst = await  ammCreatePool({
             startTime,
             addBaseAmount,
             addQuoteAmount,
@@ -60,12 +84,32 @@ async function start() {
             targetMarketId,
             wallet: privateKey,
             walletTokenAccounts,
-        }).then(({ txids }) => {
-            /** continue with txids */
-            console.log('txids', txids)
-        })
+        }) 
 
+        const transactions = new Transaction();
 
+        const tnxAB   =  await buildSimpleTransaction({
+            connection,
+            makeTxVersion,
+            payer: wallet.publicKey,
+            innerTransactions: innerTransactionInst.innerTransactions,
+            addLookupTableInfo: addLookupTableInfo,
+          })
+          const tnxCD =  await buildSimpleTransaction({
+            connection,
+            makeTxVersion,
+            payer: wallet.publicKey,
+            innerTransactions: innerTransactions,
+            addLookupTableInfo: addLookupTableInfo,
+          })
+
+          const txList: (VersionedTransaction | Transaction)[] = []
+          
+          txList.concat(tnxAB).concat(tnxCD);
+
+          const opt :SendOptions = {};
+          
+          return await sendTx(connection, wallet.payer, txList, opt)
 
     })
 

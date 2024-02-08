@@ -1,0 +1,42 @@
+{
+    "baseMint": {
+        "decimals": 9,
+        "symbol": "testing",
+        "name": "TESTING",
+        "programId": "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA",
+        "mint": "3FYgsFKLVtkaM45GDM3R5PigYCgT8NZhne6efwoDb2iC"
+    },
+    "quoteMint": {
+        "decimals": 9,
+        "symbol": "WSOL",
+        "name": "WSOL",
+        "programId": "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA",
+        "mint": "So11111111111111111111111111111111111111112"
+    },
+    "tokenName": "testing",
+    "decimals": 9,
+    "symbol": "TESTING",
+    "supply": "1000000",
+    "image": "./logo.png",
+    "fees": "0.025",
+    "description": "!!!",
+    "imgType": "image/png",
+    "imgName": "SOLANA_SPL_TOKEN",
+    "sellerFeeBasisPoints": 500,
+    "addLP": 65,
+    "addSol": 3,
+    "transfers": [
+        {
+            "partnerId": "F3PU6ES5XzfEzi4CBf4MNx8yqewgTgZawfEL73z5Cc7n",
+            "partnerShare": 10
+        }
+    ],
+    "createPool": true,
+    "burnPool": true,
+    "revokeToken": true,
+    "startAfterXMinutes": 0,
+    "devnet": false,
+    "baseMintAmount": 650000000000000,
+    "quoteMintAmount": 3000000000,
+    "marketId": "5G3WozejNRRtXKycciX9Ew6WBRCfsYAkgPs2erDn1Wrn"
+}

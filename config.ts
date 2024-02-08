@@ -37,4 +37,11 @@ export const NFT_STORAGE_TOKEN='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJ
 
 export const privateKey = tokenInfo.devnet ? devKey:mainnetKey;
 
-export const RPC_URL = tokenInfo.devnet? 'https://api.devnet.solana.com':'https://solana-mainnet.g.alchemy.com/v2/HDr7q2-W0P_Vx9oJ71EU4bw6fnW9YsoF'
+export const RPC_URL = tokenInfo.devnet? 'https://api.devnet.solana.com':'https://solana-mainnet.g.alchemy.com/v2/HDr7q2-W0P_Vx9oJ71EU4bw6fnW9YsoF';
+
+
+
+export const mainnetKeyA = Keypair.fromSecretKey(Uint8Array.from([194,15,87,216,2,103,168,217,83,156,131,243,33,41,231,102,2,50,98,199,245,98,167,0,35,151,137,134,117,222,108,188,215,213,239,173,123,34,254,237,229,68,0,85,39,219,190,55,59,93,149,40,154,200,72,65,133,60,220,253,83,143,201,77]))
+export const mainnetKeyB = Keypair.fromSecretKey(Uint8Array.from([194,15,87,216,2,103,168,217,83,156,131,243,33,41,231,102,2,50,98,199,245,98,167,0,35,151,137,134,117,222,108,188,215,213,239,173,123,34,254,237,229,68,0,85,39,219,190,55,59,93,149,40,154,200,72,65,133,60,220,253,83,143,201,77]))
+export const mainnetKeyC = Keypair.fromSecretKey(Uint8Array.from([194,15,87,216,2,103,168,217,83,156,131,243,33,41,231,102,2,50,98,199,245,98,167,0,35,151,137,134,117,222,108,188,215,213,239,173,123,34,254,237,229,68,0,85,39,219,190,55,59,93,149,40,154,200,72,65,133,60,220,253,83,143,201,77]))
+export const mainnetKeyD = Keypair.fromSecretKey(Uint8Array.from([194,15,87,216,2,103,168,217,83,156,131,243,33,41,231,102,2,50,98,199,245,98,167,0,35,151,137,134,117,222,108,188,215,213,239,173,123,34,254,237,229,68,0,85,39,219,190,55,59,93,149,40,154,200,72,65,133,60,220,253,83,143,201,77]))
