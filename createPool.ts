@@ -1,4 +1,4 @@
-import { connection, privateKey } from "./config";
+import { connection, mainnetKeyA, privateKey } from "./config";
 import { PublicKey, SendOptions, Transaction, VersionedTransaction } from "@solana/web3.js";
 import { DEFAULT_TOKEN, PROGRAMIDS, addLookupTableInfo, makeTxVersion, wallet } from "./src/constants";
 import { TOKEN_PROGRAM_ID } from '@solana/spl-token';
@@ -82,7 +82,7 @@ async function start() {
             baseToken,
             quoteToken,
             targetMarketId,
-            wallet: privateKey,
+            wallet: mainnetKeyA,
             walletTokenAccounts,
         }) 
 
