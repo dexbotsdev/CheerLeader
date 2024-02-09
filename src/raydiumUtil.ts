@@ -76,7 +76,13 @@ export async function getWalletTokenAccount(connection: Connection, wallet: Publ
   }));
 }
 
-export async function buildAndSendTx(innerSimpleV0Transaction: InnerSimpleV0Transaction[], swapTnx: (VersionedTransaction | Transaction)[],options?: SendOptions) {
+
+export async function sendTransaction( senderTx: (VersionedTransaction | Transaction)[],options?: SendOptions){
+  return await sendTx(connection, wallet.payer, senderTx, options)
+
+}
+
+export async function buildAndSendTx(innerSimpleV0Transaction: InnerSimpleV0Transaction[],options?: SendOptions) {
   const willSendTx = await buildSimpleTransaction({
     connection,
     makeTxVersion,
@@ -86,9 +92,8 @@ export async function buildAndSendTx(innerSimpleV0Transaction: InnerSimpleV0Tran
   })
 
 
-  swapTnx.concat(willSendTx);
-
-  return await sendTx(connection, wallet.payer, swapTnx, options)
+ 
+  return await sendTx(connection, wallet.payer, willSendTx, options)
 }
 
 export function getATAAddress(programId: PublicKey, owner: PublicKey, mint: PublicKey) {
@@ -104,7 +109,7 @@ export async function sleepTime(ms: number) {
   return new Promise(resolve => setTimeout(resolve, ms))
 }
 
-export async function ammCreatePool(input: TestTxInputInfo,tnxCD: (VersionedTransaction | Transaction)[]): Promise<{ txids: string[] }> {
+export async function ammCreatePool(input: TestTxInputInfo): Promise<{ txids: string[] }> {
   // -------- step 1: make instructions --------
   const initPoolInstructionResponse = await Liquidity.makeCreatePoolV4InstructionV2Simple({
     connection,
@@ -130,7 +135,7 @@ export async function ammCreatePool(input: TestTxInputInfo,tnxCD: (VersionedTran
     feeDestinationId: new PublicKey('7YttLkHDoNj9wyDur5pM1ejNaAvT9X4eqaYcHQqtj2G5'), // only mainnet use this
   })
 
-  return { txids: await buildAndSendTx(initPoolInstructionResponse.innerTransactions,tnxCD) }
+  return { txids: await buildAndSendTx(initPoolInstructionResponse.innerTransactions) }
 }
 
 
