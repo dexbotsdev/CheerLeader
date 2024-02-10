@@ -7,7 +7,7 @@ import { Liquidity, MARKET_STATE_LAYOUT_V3, Market, Percent, Token, TokenAmount,
 import { BN } from "@project-serum/anchor";
 import { ammCreatePool, buildAndSendTx, calcMarketStartPrice, getWalletTokenAccount, sendTransaction } from "./src/raydiumUtil";
 import { AxiosRequestConfig } from "axios";
-import { HttpProvider } from "@bloxroute/solana-trader-client-ts";
+import { HttpProvider, PostRaydiumSwapResponse } from "@bloxroute/solana-trader-client-ts";
 import bs58 from "bs58";
 
 const httpTimeout = 30_000
@@ -89,12 +89,14 @@ async function start() {
 
             const { blockhash, lastValidBlockHeight } = await connection.getLatestBlockhash();
 
-            const response = await this.provider.postRaydiumSwap({
-                ownerAddress: this.w.publicKey.toBase58(),
-                outToken: new PublicKey(tokenInfo.baseMint.mint),
+            const response :PostRaydiumSwapResponse  = await  provider.postRaydiumSwap({
+                ownerAddress: wallet.publicKey.toBase58(),
+                outToken: tokenInfo.baseMint.mint,
                 inToken: "SOL",
-                inAmount: "0.01",
-                slippage: "1",
+                inAmount: 0.01,
+                slippage: 1,
+                computeLimit: 0,
+                computePrice: ""
             })
             const buff = Buffer.from(response.transactions[0].content, "base64");
             const solanaTx = VersionedTransaction.deserialize(buff);
