@@ -1,10 +1,10 @@
 {
     "baseMint": {
-        "decimals": 9,
-        "symbol": "testing",
-        "name": "TESTING",
+        "decimals": 6,
+        "symbol": "BONKX",
+        "name": "BONX",
         "programId": "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA",
-        "mint": "3FYgsFKLVtkaM45GDM3R5PigYCgT8NZhne6efwoDb2iC"
+        "mint": "HN96KFT7A17wQ8QnEaoTKASnAj3gTxTsfhYzPUbD9Ln2"
     },
     "quoteMint": {
         "decimals": 9,
@@ -13,21 +13,21 @@
         "programId": "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA",
         "mint": "So11111111111111111111111111111111111111112"
     },
-    "tokenName": "testing",
-    "decimals": 9,
-    "symbol": "TESTING",
+    "tokenName": "BONKX",
+    "decimals": 6,
+    "symbol": "BONX",
     "supply": "1000000",
     "image": "./logo.png",
     "fees": "0.025",
-    "description": "!!!",
+    "description": "The $BONKX is a home video game console developed and marketed by Nintendo",
     "imgType": "image/png",
     "imgName": "SOLANA_SPL_TOKEN",
     "sellerFeeBasisPoints": 500,
-    "addLP": 65,
-    "addSol": 3,
+    "addLP": 90,
+    "addSol": 1,
     "transfers": [
         {
-            "partnerId": "F3PU6ES5XzfEzi4CBf4MNx8yqewgTgZawfEL73z5Cc7n",
+            "partnerId": "DbGWZNB8e9X8tsVhZuZjCXGxcfRCiRZDLLSNUXwns9Nb",
             "partnerShare": 10
         }
     ],
@@ -36,7 +36,8 @@
     "revokeToken": true,
     "startAfterXMinutes": 0,
     "devnet": false,
-    "baseMintAmount": 650000000000000,
-    "quoteMintAmount": 3000000000,
-    "marketId": "5G3WozejNRRtXKycciX9Ew6WBRCfsYAkgPs2erDn1Wrn"
+    "baseMintAmount": 900000000000,
+    "quoteMintAmount": 100000000,
+    "marketId": "DX9ovFDSXZaVcrBuLswSyLHohR1TS3u3JjsMaybD4K1s"
+    
 }

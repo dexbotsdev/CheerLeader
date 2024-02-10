@@ -38,6 +38,7 @@ async function main() {
     });
     console.log('   Metadata URI:',uri);
  
+    console.log('Minting TOken    ');
 
  await createAndMint(umi, {
         mint,
@@ -69,6 +70,8 @@ async function main() {
               console.log('Token has been Generated Now Run , "npm run revokeToken"')
             
              
+        }).catch((err)=>{
+            console.log(err);
         })
 
 

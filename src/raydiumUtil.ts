@@ -140,6 +140,6 @@ export async function ammCreatePool(input: TestTxInputInfo): Promise<{ txids: st
 
 
 export function calcMarketStartPrice(input: CalcStartPrice) {
-  return input.addBaseAmount.toNumber() / 10 ** 6 / (input.addQuoteAmount.toNumber() / 10 ** 6)
+  return (input.addBaseAmount.toNumber() / 10 ** 6 )/ (input.addQuoteAmount.toNumber() / 10 ** 9)
 }
 

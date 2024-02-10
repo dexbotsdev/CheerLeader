@@ -1,3 +1,5 @@
 node_modules 
 .DS_Store
 test-ledger
+validator-keypair.json
+a.json

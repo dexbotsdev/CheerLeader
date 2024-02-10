@@ -17,7 +17,7 @@ import * as splToken from "@solana/spl-token";
 export const METAPLEX = Metaplex.make(connection)
     .use(keypairIdentity(privateKey))
     .use(irysStorage({
-        address: 'https://node2.irys.xyz',
+        address: 'https://devnet.irys.xyz',
         providerUrl: RPC_URL,
         timeout: 60000,
     }));

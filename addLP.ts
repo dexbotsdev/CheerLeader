@@ -20,7 +20,7 @@ async function start() {
         const baseToken = new Token(TOKEN_PROGRAM_ID, new PublicKey(tokenInfo.baseMint.mint), tokenInfo.baseMint.decimals, tokenInfo.baseMint.name, tokenInfo.baseMint.symbol) // USDC
         const quoteToken = DEFAULT_TOKEN.SOL // RAY
         const targetMarketId = new PublicKey(tokenInfo.marketId)
-        const addBaseAmount = new BN(tokenInfo.baseMintAmount).sub(new BN(1)) // 10000 / 10 ** 6,
+        const addBaseAmount = new BN(tokenInfo.baseMintAmount).sub(new BN(1 * 10**6)) // 10000 / 10 ** 6,
         const addQuoteAmount = new BN(tokenInfo.quoteMintAmount)
         const startTime = Math.floor(Date.now() / 1000) + 5 * 60
         const walletTokenAccounts = await getWalletTokenAccount(connection, wallet.publicKey)
@@ -32,8 +32,8 @@ async function start() {
 
         const targetPoolInfo = await formatAmmKeysById(tokenInfo.poolKeys.id)
 
-        const inputTokenAmount = new TokenAmount(baseToken, tokenInfo.baseMintAmount)
-        const swapTokenAmount = new TokenAmount(quoteToken, '0.1')
+        const inputTokenAmount = new TokenAmount(baseToken, addBaseAmount)
+        const swapTokenAmount = new TokenAmount(quoteToken, 0.01*10**9)
 
         // -------- step 1: compute another amount --------
         const poolKeys = jsonInfo2PoolKeys(targetPoolInfo) as LiquidityPoolKeys
@@ -46,7 +46,7 @@ async function start() {
             slippage: slippage,
         })
 
-        console.log('will add liquidity info', {
+        console.log('will add liquidity info', {maxAnotherAmount, anotherAmount,
             liquidity: liquidity.toString(),
             liquidityD: new Decimal(liquidity.toString()).div(10 ** extraPoolInfo.lpDecimals),
         })
@@ -80,7 +80,7 @@ async function start() {
                 owner: mainnetKeyA.publicKey,
             },
             amountIn: swapTokenAmount,
-            amountOut: new TokenAmount(baseToken, '1', false),
+            amountOut: new TokenAmount(baseToken, '100', false),
             fixedSide: 'in',
             makeTxVersion,
         });
