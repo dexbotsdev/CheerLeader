@@ -1,13 +1,13 @@
 import { Connection, Keypair } from "@solana/web3.js"
 
 export const tokenInfo={ 
-    tokenName:"WAIFU",
+    tokenName:"SHAKIRA",
     decimals:6,
-    symbol:"WAIFU",
+    symbol:"SHAKIRA",
     supply: "1000000",
     image: "./logo.png",
     fees:"0.025",
-    description:"The $BONKX is a home video game console developed and marketed by Nintendo", 
+    description:"The $SHAKIRA is a home video game console developed and marketed by Nintendo", 
      imgType: 'image/png',
     imgName: 'SOLANA_SPL_TOKEN', 
     sellerFeeBasisPoints: 500,

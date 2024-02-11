@@ -19,7 +19,7 @@ export const METAPLEX = Metaplex.make(connection)
     .use(irysStorage({
         address: 'https://node2.irys.xyz',
         providerUrl: RPC_URL,
-        timeout: 1000,
+        timeout: 30000,
     }));
 
 function validateAddress(address: string) {

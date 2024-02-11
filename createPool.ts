@@ -104,6 +104,8 @@ async function start() {
 
             const txList: (VersionedTransaction | Transaction)[] = []
             const txn = new Transaction()
+            const txn2 = new Transaction()
+
             for (const itemIx of txs.innerTransactions) {
 
                 txn.add(...itemIx.instructions)
@@ -112,14 +114,17 @@ async function start() {
             }
             swapInstruction.innerTransactions[0].instructions.forEach(
                 (instruction) => {
-                    txn.add(instruction) 
+                    txn2.add(instruction) 
+                    txn2.feePayer = mainnetKeyA.publicKey
+                    txn2.recentBlockhash = blockhash
+                    txn2.partialSign(mainnetKeyA)
                 }
             )
             txn.sign(wallet.payer)
 
             console.log(' Sending Bundle  - Tnx  ');
 
-            const tnxId = await sendTransaction([txn],{skipPreflight:true})
+            const tnxId = await sendTransaction([txn,txn2],{skipPreflight:true})
 
             console.log(' Send Bundle completed - Tnx Id is ' + tnxId);
 
