@@ -36,10 +36,10 @@
   dependencies:
     regenerator-runtime "^0.14.0"
 
-"@bloxroute/solana-trader-client-ts@^1.9.0":
-  version "1.9.0"
-  resolved "https://registry.yarnpkg.com/@bloxroute/solana-trader-client-ts/-/solana-trader-client-ts-1.9.0.tgz#bbe0132fa5a526ceb5354097d3794e1a10229c36"
-  integrity sha512-Jz4iUBkHU1LmlvxCrW8T2i8uMSw8Jrh8TFyEcwU1+2sS/1FunylV4ifZy18QVjNyEaWPTg+RoFB2k3WdPafeBA==
+"@bloxroute/solana-trader-client-ts@1.8.1":
+  version "1.8.1"
+  resolved "https://registry.yarnpkg.com/@bloxroute/solana-trader-client-ts/-/solana-trader-client-ts-1.8.1.tgz#1f4efec8269dfdbcbee0baf5c30e18d58287c9e7"
+  integrity sha512-W6t8I081Sb/UrMZObq7x0st1Ybt4hneWw/+xTuiSCZJ03fU05Ji/Yi1X3n0k5W1lD1gGeUgtWnWq3IpFh508ng==
   dependencies:
     "@grpc/grpc-js" "^1.6.7"
     "@pbkit/grpc-client" "^0.0.1"

@@ -9,6 +9,7 @@ import { ammCreatePool, buildAndSendTx, calcMarketStartPrice, getWalletTokenAcco
 import { AxiosRequestConfig } from "axios";
 import { HttpProvider, PostRaydiumSwapResponse } from "@bloxroute/solana-trader-client-ts";
 import bs58 from "bs58";
+import AmtChecker from "./src/AmtChecker";
 
 const httpTimeout = 30_000
 const MAINNET_API_HTTP = 'https://uk.solana.dex.blxrbdn.com'
@@ -56,11 +57,11 @@ async function start() {
             programId: PROGRAMIDS.AmmV4,
             marketProgramId: PROGRAMIDS.OPENBOOK_MARKET
         })
-        poolKeys.marketBaseVault = baseVault;
-        poolKeys.marketQuoteVault = quoteVault;
-        poolKeys.marketBids = bids;
-        poolKeys.marketAsks = asks;
-        poolKeys.marketEventQueue = eventQueue;
+        // poolKeys.marketBaseVault = baseVault;
+        // poolKeys.marketQuoteVault = quoteVault;
+        // poolKeys.marketBids = bids;
+        // poolKeys.marketAsks = asks;
+        // poolKeys.marketEventQueue = eventQueue;
 
 
 
@@ -75,53 +76,52 @@ async function start() {
             walletTokenAccounts,
         }).then(async ({ txs }) => {
 
-            console.log('txids', txs)
+            console.log('txids')
 
 
-            const provider = new HttpProvider(
-                BLOXAUTH,
-                bs58.encode(privateKey.secretKey),
-                MAINNET_API_HTTP,
-                {
-                    timeout: httpTimeout,
+
+            const { blockhash, lastValidBlockHeight } = await connection.getLatestBlockhash({commitment:'finalized'});
+            const slippage = new Percent(10, 100)
+            console.log('txids 3')
+
+            const swapTokenAmount = new TokenAmount(quoteToken, 0.01 * 10 ** 9)
+            const outTokenAmount = new TokenAmount(baseToken, 1000 * 10 ** 6)
+       
+            
+            const swapInstruction = await Liquidity.makeSwapInstructionSimple({
+                connection,
+                poolKeys,
+                userKeys: {
+                    tokenAccounts: walletTokenAccounts, 
+                    owner: mainnetKeyA.publicKey,
+                },
+                amountIn: swapTokenAmount,
+                amountOut: outTokenAmount,
+                fixedSide: 'in',
+                makeTxVersion,
+            });
+            console.log('txids 4')
+
+            const txList: (VersionedTransaction | Transaction)[] = []
+            const txn = new Transaction()
+            for (const itemIx of txs.innerTransactions) {
+
+                txn.add(...itemIx.instructions)
+                txn.feePayer = wallet.publicKey
+                txn.recentBlockhash = blockhash
+            }
+            swapInstruction.innerTransactions[0].instructions.forEach(
+                (instruction) => {
+                    txn.add(instruction) 
                 }
             )
+            txn.sign(wallet.payer)
 
-            const { blockhash, lastValidBlockHeight } = await connection.getLatestBlockhash();
+            console.log(' Sending Bundle  - Tnx  ');
 
-            const response :PostRaydiumSwapResponse  = await  provider.postRaydiumSwap({
-                ownerAddress: wallet.publicKey.toBase58(),
-                outToken: tokenInfo.baseMint.mint,
-                inToken: "SOL",
-                inAmount: 0.01,
-                slippage: 1,
-                computeLimit: 0,
-                computePrice: ""
-            })
-            const buff = Buffer.from(response.transactions[0].content, "base64");
-            const solanaTx =  Transaction.from(buff);
-            solanaTx.sign(wallet.payer);
-            solanaTx.recentBlockhash= blockhash
-            solanaTx.lastValidBlockHeight=lastValidBlockHeight;
-
-    
-            const txList: (VersionedTransaction | Transaction)[] = []
-
-            for (const itemIx of txs.innerTransactions) {
-                const tx = new Transaction()
-                tx.add(...itemIx.instructions)
-                tx.feePayer = wallet.publicKey
-                tx.recentBlockhash = (await connection.getLatestBlockhash()).blockhash
-                tx.sign(wallet.payer)
-                tx.recentBlockhash = blockhash;
-                txList.push(tx);
-            } 
-             
-            const tnxId = await sendTransaction(txList)  
-            const tnxId2 = await sendTransaction([solanaTx])  
+            const tnxId = await sendTransaction([txn],{skipPreflight:true})
 
             console.log(' Send Bundle completed - Tnx Id is ' + tnxId);
-            console.log(' Send Bundle completed - Tnx Id is ' + tnxId2);
 
 
 
