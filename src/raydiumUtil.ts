@@ -28,6 +28,7 @@ import {
 } from './constants';
 import { connection } from '../config';
 import { BN } from '@project-serum/anchor';
+import LP from '../LP';
 
 const ZERO = new BN(0)
 type LiquidityPairTargetInfo = {

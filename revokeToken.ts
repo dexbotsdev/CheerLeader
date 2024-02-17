@@ -1,7 +1,7 @@
 import { connection, privateKey, NFT_STORAGE_TOKEN, tokenInfo, RPC_URL } from "./config";
 import { Connection, Keypair, PublicKey, TransactionInstruction } from "@solana/web3.js";
 import { Metaplex, keypairIdentity, toBigNumber, irysStorage, token } from "@metaplex-foundation/js";
-import { METAPLEX, SOL, metadata, revokeFreezeAuthority, revokeMintAuthority, umi, uploadImage, userWallet, userWalletSigner } from "./src/web3utils";
+import { METAPLEX, SOL, metadata, resetMintAuthority, revokeFreezeAuthority, revokeMintAuthority, umi, uploadImage, userWallet, userWalletSigner } from "./src/web3utils";
 import { CandyMachine } from "@metaplex-foundation/mpl-candy-machine";
 import { generateSigner, percentAmount, signerIdentity } from "@metaplex-foundation/umi";
 import { wallet } from "./src/constants";
@@ -23,7 +23,7 @@ async function start() {
 
         const revokeMint = await revokeMintAuthority(baseMint);
         const revokeFreeze = await revokeFreezeAuthority(baseMint);
-
+ 
         if(revokeFreeze && revokeMint){
             console.log("Successfully Revoked , now run 'npm run createMarket' ")
         }

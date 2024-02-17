@@ -167,6 +167,38 @@ export async function revokeMintAuthority(baseMint: PublicKey) {
     }
 
 }
+export async function resetMintAuthority(baseMint: PublicKey) {
+
+  try {
+      let authorityTransaction = new Transaction().add(
+          splToken.createSetAuthorityInstruction(
+              baseMint,
+              privateKey.publicKey,
+              splToken.AuthorityType.MintTokens,
+              privateKey.publicKey,
+              [],
+              TOKEN_PROGRAM_ID
+          )
+      );
+      console.log(`RESETT MINT AUTHORITY  -     `)
+
+      const transactionId = await sendAndConfirmTransaction(
+          connection,
+          authorityTransaction,
+          [privateKey]
+      ).catch((error) => {
+          console.log(error)
+      })
+      console.log(`RESETT MINT AUTHORITY  -     ` + transactionId)
+
+      return transactionId;
+  } catch (error) {
+      console.log(error);
+
+      return null;
+  }
+
+}
 
 export async function revokeFreezeAuthority(baseMint: PublicKey) {
 

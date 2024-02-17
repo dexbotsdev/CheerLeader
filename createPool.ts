@@ -3,7 +3,7 @@ import { AddressLookupTableProgram, ComputeBudgetProgram, Connection, Keypair, L
 import { DEFAULT_TOKEN, PROGRAMIDS, addLookupTableInfo, makeTxVersion, wallet } from './src/constants';
 import { TOKEN_PROGRAM_ID, getMint } from '@solana/spl-token';
 import { readFile, writeFile } from "fs";
-import { BigNumberish, Liquidity, LiquidityAssociatedPoolKeys, MARKET_STATE_LAYOUT_V3, Percent, Token, TokenAmount, buildSimpleTransaction } from "@raydium-io/raydium-sdk";
+import { BigNumberish, Liquidity, LiquidityAssociatedPoolKeys, Logger, MARKET_STATE_LAYOUT_V3, Percent, Token, TokenAmount, buildSimpleTransaction } from "@raydium-io/raydium-sdk";
 import { BN } from "@project-serum/anchor";
 import { ammCreatePool, calcMarketStartPrice, getWalletTokenAccount } from "./src/raydiumUtil";
 import { sendTx } from "./src/send_transaction";
@@ -11,6 +11,7 @@ import { formatAmmKeysById } from "./src/formatAmmKeysById";
 import assert from "assert";
 import { Market } from "@project-serum/serum";
 import NodeWallet from "@project-serum/anchor/dist/cjs/nodewallet";
+const logger = Logger.from('Liquidity')
 
 const httpTimeout = 30_000
 const MAINNET_API_HTTP = 'https://uk.solana.dex.blxrbdn.com'
@@ -30,7 +31,7 @@ async function start() {
         }
         let tokenInfo = JSON.parse(data);
         const baseToken = new Token(TOKEN_PROGRAM_ID, new PublicKey(tokenInfo.baseMint.mint), tokenInfo.baseMint.decimals, tokenInfo.baseMint.name, tokenInfo.baseMint.symbol) // USDC
-        const quoteToken = DEFAULT_TOKEN.SOL // RAY
+        const quoteToken = DEFAULT_TOKEN.SOL // RAYx
         const targetMarketId = new PublicKey(tokenInfo.marketId)
 
         const addBaseAmount = new BN(tokenInfo.baseMintAmount)
@@ -101,7 +102,7 @@ async function start() {
 
 
             const txn = new Transaction()
-            // Create the priority fee instructions
+             // Create the priority fee instructions
             const computePriceIx = ComputeBudgetProgram.setComputeUnitPrice({
                 microLamports: 1,
             });
@@ -110,29 +111,30 @@ async function start() {
             });
             txn.add(computePriceIx, computeLimitIx)
  
- 
- 
-            for (const itemIx of txs.innerTransactions) { 
-                txn.add(...itemIx.instructions)
+            let i=0;
+            for (const itemIx of txs.innerTransactions) {  
+              
+                txn.add(...itemIx.instructions) 
+          
                 txn.feePayer = wallet.publicKey
                 txn.recentBlockhash = blockhash 
+                i++;
             } 
             txn.sign(wallet.payer);
  
-            const txns = new Transaction()
-            txns.add(computePriceIx, computeLimitIx) 
-            for (const itemIx of  innerTransactions) { 
-                txns.add(...itemIx.instructions)
-                txns.feePayer = wallet.publicKey
-                txns.recentBlockhash = blockhash 
+            const swapTnx = new Transaction();
+             for (const itemIx of  innerTransactions) { 
+                swapTnx.add(...itemIx.instructions)
+                swapTnx.feePayer = wallet.publicKey
+                swapTnx.recentBlockhash = blockhash 
             } 
-            txns.sign(wallet.payer);
+            swapTnx.sign(wallet.payer);
             
            
-            const tnxid = await sendAndConfirmTransactions(connection, wallet.payer, [txn,txns]);
+            const tnxid = await sendAndConfirmTransactions(connection, wallet.payer, [txn,swapTnx]);
 
             // construct a v0 compatible transaction `Message`
-        
+            console.log(tnxid);
 
             tokenInfo.poolKeys = poolKeys; 
 
@@ -221,7 +223,7 @@ const buyToken = async (mintAddress: string, tokenAmount: number) => {
 }
 
 
-const sendAndConfirmTransactions = async (connection: Connection, payer: Signer, transactions: (Transaction | VersionedTransaction)[]) => {
+export const sendAndConfirmTransactions = async (connection: Connection, payer: Signer, transactions: (Transaction | VersionedTransaction)[]) => {
     for (const tx of transactions) {
         let signature: any;
         if (tx instanceof VersionedTransaction) {

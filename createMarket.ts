@@ -304,11 +304,26 @@ async function start() {
 
             tokenInfo ={
                 ...tokenInfo,
-                ...tokenPoolInfo
+                ...tokenPoolInfo,
+                poolInfo:{  market: marketAccounts.market.publicKey,
+                requestQueue: marketAccounts.requestQueue.publicKey,
+                eventQueue: marketAccounts.eventQueue.publicKey,
+                bids: marketAccounts.bids.publicKey,
+                asks: marketAccounts.asks.publicKey,
+                baseVault: marketAccounts.baseVault.publicKey,
+                quoteVault: marketAccounts.quoteVault.publicKey,
+                baseMint,
+                quoteMint,
+                baseLotSize:  baseLotSize ,
+                quoteLotSize: quoteLotSize ,
+                feeRateBps: 0, // Unused in v3
+                quoteDustThreshold:  1 , // Unused in v3
+                vaultSignerNonce: vaultOwnerNonce,
+                programId: programID},
             }
             writeFile('./tokenInfo.json',JSON.stringify(tokenInfo), (err) => {
                 if (err) throw err;
-                console.log('The file has been saved! Now run --  npm run createLookup');
+                console.log('The file has been saved! Now run --  npm run createPool');
               });
 
         } catch (e) {
