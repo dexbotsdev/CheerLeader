@@ -14,3 +14,7 @@ q/utils.js
 yarn-error.log
 yarn.lock
 tokenInfo.json
+test
+jitodeployer.json
+package-lock.json
+yarn.lock
