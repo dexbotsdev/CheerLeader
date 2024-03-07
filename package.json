@@ -7,10 +7,11 @@
     "start": "ts-node src/tokenMint.ts",
     "revokeToken": "ts-node src/revokeToken.ts",
     "createMarket": "ts-node src/createMarket.ts", 
-    "createPool": "ts-node src/jitoPool.ts",
+    "createPool": "ts-node src/createPoolJito.ts",
     "genWallets": "ts-node src/genWallets.ts",
     "preloadWallets": "ts-node src/preloadWallets.ts",
-    "preloadSol": "ts-node src/preloadSol.ts"
+    "preloadSol": "ts-node src/preloadSol.ts",
+    "swapWallets": "ts-node src/swapWallets.ts"
   },
   "author": "",
   "license": "ISC",

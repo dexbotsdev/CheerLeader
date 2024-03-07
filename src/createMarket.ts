@@ -326,7 +326,7 @@ async function start() {
             }
             writeFile('./tokenInfo.json',JSON.stringify(tokenInfo), (err) => {
                 if (err) throw err;
-                console.log('The file has been saved! Now run --  npm run distribute');
+                console.log('The file has been saved! Now run --  npm run genWallets');
               });
 
         } catch (e) {

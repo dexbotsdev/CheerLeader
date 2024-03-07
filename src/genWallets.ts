@@ -63,16 +63,16 @@ async function start() {
 
         writeFile('./tokenInfo.json', JSON.stringify(tokenInfo), (err) => {
             if (err) throw err;
-            console.log('The file has been saved! Now run --  npm run supplyTransfer');
+            console.log('The file tokenInfo been saved! Now run --  npm run preloadSol');
         });
 
         writeFile('./swapWallets.txt', JSON.stringify(swapWalletsTxt,null,2), (err) => {
             if (err) throw err;
-            console.log('The file has been saved! Now run --  npm run supplyTransfer');
+            console.log('The file swapWallets been saved! Now run --  npm run preloadSol');
         });
         writeFile('./supplyWallets.txt', JSON.stringify(supplyWalletsTxt,null,2), (err) => {
             if (err) throw err;
-            console.log('The file has been saved! Now run --  npm run supplyTransfer');
+            console.log('The file supplyWallets been saved! Now run --  npm run preloadSol');
         });
     })
 

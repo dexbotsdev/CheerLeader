@@ -36,6 +36,8 @@ async function start() {
             const createWalletInstructions: TransactionInstruction[] = [];
 
             for (var i = 0; i < 8; i++) {
+            if(pumpWallets[pi + i])    
+            {
                 const tokenTransferAmnt = tokenInfo.walletAmountsFixed ? Number(tokenInfo.walletFixedTokens) * Number(tokenInfo.supply) * 0.01 ** mintInfo.decimals : randomInt(10000) * 1 ** mintInfo.decimals;
                 const walletAddress = pumpWallets[pi + i].walletAddress;
                 const txnInst: any = await transferSPL(tokenInfo.baseMint.mint, tokenTransferAmnt.toFixed(0), walletAddress, wallet.payer, fromTokenAccount);
@@ -49,7 +51,7 @@ async function start() {
                 );
 
  
-            }
+            }}
 
             const tipIxn = SystemProgram.transfer({
                 fromPubkey: wallet.publicKey,

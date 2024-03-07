@@ -212,6 +212,7 @@ const createWalletSwaps = async (swapWallets:any,poolKeys: any, baseToken: Token
         console.debug('Create Step 1 Swap ')
         const userwallet = Keypair.fromSecretKey(bs58.decode(item.privateKey));
         const swapperwallet = new NodeWallet(userwallet);
+        const createSwapInstructions: TransactionInstruction[] = [];
 
         const userwalletTokenAccounts = await getWalletTokenAccount(connection, swapperwallet.publicKey);
         const outputTokenAmount = new TokenAmount(baseToken, 1, false);

