@@ -1,9 +1,13 @@
 import { Connection, Keypair } from "@solana/web3.js"
 import bs58 from 'bs58'
 
-const deployerKey='4dA4TfHXitcFhB5cdQgoQMN7V8jY4stZjzUPk6ybh9n3iJ5w8wVQ3u2exy7A5urvHveH3YV14Gqi7498B68cewnf'
+//const deployerKey='4dA4TfHXitcFhB5cdQgoQMN7V8jY4stZjzUPk6ybh9n3iJ5w8wVQ3u2exy7A5urvHveH3YV14Gqi7498B68cewnf'
 
-const senderKey='5TcMCt9Tkm98QR9GP8n5oQb28vTbDDyruciwNDSzBcCVDSxbm7wbsZRvtNPCwQ4pNy56YiEmKMhRQywk22mXvHm8'
+//const senderKey='5TcMCt9Tkm98QR9GP8n5oQb28vTbDDyruciwNDSzBcCVDSxbm7wbsZRvtNPCwQ4pNy56YiEmKMhRQywk22mXvHm8'
+
+const deployerKey='91RaH5DxKPcPK9KFBUkxSi1RLYGpxdWa6MGyuoiNnHmqocHD8EHUc1p7Lmi8etCqhfQeV99A9KdTgk8XDri6GFK'
+
+const senderKey='HSMKnVJuUddgw7tzuGJPZ5PzZrLuJPhazyRoSvYzsDC3hvcaz2QXnNn7CLLnaTwsvzLEW9NVHVGYaBsKo16h4xh'
 
 
 
@@ -35,13 +39,12 @@ export const devnetKey  = Keypair.fromSecretKey(bs58.decode(deployerKey))
 export const mainnetKey = Keypair.fromSecretKey(bs58.decode(deployerKey))
 export const NFT_STORAGE_TOKEN='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJkaWQ6ZXRocjoweDAxQzM4ZGVhN0QwQTcxRkIyY0NGOGIzYzliMWVmMDk3Mjc0MUY2ODYiLCJpc3MiOiJuZnQtc3RvcmFnZSIsImlhdCI6MTcwMTkxNDE5MDY3MCwibmFtZSI6Im9yZGluYW5jZSJ9.DR8xEjrABHIXPV3tBktejuG7br0r672brDF4Fy-fvBY'
 
-console.log(bs58.encode(devnetKey.secretKey))
 
 export const privateKey = tokenInfo.devnet ? devnetKey:mainnetKey;
 
 export const sender = Keypair.fromSecretKey(bs58.decode(senderKey))
 export const RPC_URL = tokenInfo.devnet? 'https://solana-devnet.g.alchemy.com/v2/nRseMC35yPyR6XOdzvbktQ6dlT4Z1OMk':
-    'https://solana-mainnet.g.alchemy.com/v2/w3QZWz-Bh19CfQn6C0N6oX2ExF_nqO8X';
+    'http://45.76.95.100:8899/';
 
 export const connection = new Connection(RPC_URL,'confirmed') 
  
