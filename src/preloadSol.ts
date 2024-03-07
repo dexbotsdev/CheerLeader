@@ -31,8 +31,11 @@ async function start() {
         for (var pi = 0; pi < pumpWallets.length; pi += 8) {
             const createWalletInstructions: TransactionInstruction[] = [];
 
+            
             for (var i = 0; i < 8; i++) {
-                const walletAddress = pumpWallets[pi * i].walletAddress;
+            
+                if(pumpWallets[pi + i])
+            {    const walletAddress = pumpWallets[pi + i].walletAddress;
                  createWalletInstructions.push(
                     SystemProgram.transfer({
                         fromPubkey: wallet.publicKey,
@@ -40,8 +43,8 @@ async function start() {
                         lamports: pumpWallets[pi * i].tokenSwapAmount
                     }) 
                 );
-
-                pumpWallets[pi * i].processed = true;
+}
+                
 
             }
 
