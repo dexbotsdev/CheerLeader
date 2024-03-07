@@ -82,13 +82,15 @@ export async function getTokenBalance(tokenMintAddress: PublicKey,wallet: Keypai
 export const transferSPL = async (tokenMintAddress: string, amount: string, destAddress: string, txWallet: Keypair,fromTokenAccount:any) => {
 
   console.log('Wallet - '+destAddress); 
+  console.log('Amount  - '+amount); 
   const mintPubkey = new PublicKey(tokenMintAddress);  
   const destPubkey = new PublicKey(destAddress); 
-
   const tokenAccountBalance = await connection.getTokenAccountBalance(fromTokenAccount.address);
   if (tokenAccountBalance) {
       const decimals = tokenAccountBalance.value.decimals;
       const toTokenAccount = await getOrCreateAssociatedTokenAccount(connection, txWallet, mintPubkey, destPubkey);
+      const finalAmount = Number(amount) * 10 ** decimals
+      console.log('finalAmount  - '+finalAmount); 
 
        const transactionInstruction =  
           createTransferCheckedInstruction(
@@ -96,10 +98,10 @@ export const transferSPL = async (tokenMintAddress: string, amount: string, dest
               mintPubkey,
               toTokenAccount.address,
               txWallet.publicKey,
-              Math.floor(Number(amount) * 10 ** decimals),
+              finalAmount,
               decimals
           ) 
       return   transactionInstruction;
   }
-  return null;
+   
 };

@@ -1,1 +1,136 @@
-{"baseMint":{"decimals":9,"symbol":"WIFBONK","name":"WIFBONK","programId":"TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA","mint":"58wyDMfRUoizkQ7ZXcZHLgPAXzn2UuFaoD12Y8nNDM11"},"quoteMint":{"decimals":9,"symbol":"WSOL","name":"WSOL","programId":"TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA","mint":"So11111111111111111111111111111111111111112"},"tokenName":"WIFBONK","decimals":9,"symbol":"WIFBONK","supply":"1000000","image":"assets/logo.png","description":"The $WIFBONK is TOKEN By  Team BONK","imgType":"image/png","imgName":"SOLANA_SPL_TOKEN","addLP":90,"addSol":1,"devnet":true,"swapWalletsCount":4,"supplyWalletsCount":20,"walletAmountsFixed":false,"walletFixedTokens":0.5,"fixedSolTransfer":0.01,"baseMintAmount":900000000000000,"quoteMintAmount":1000000000,"marketId":"gHxEEWGyrVygDt46gBK6szjwVyjXXsBx96bH7K5YYrZ","poolInfo":{"market":"gHxEEWGyrVygDt46gBK6szjwVyjXXsBx96bH7K5YYrZ","requestQueue":"5yyVn8keVioxdNEUo7EVNB7kFiVXtqB2JC7dYZFNq92P","eventQueue":"BgEfRD7oSZ2fBZ3Jj7QfScGNFiUXCJA4PwdW5V5AMxLM","bids":"CmKAtpjB3HFYA8JmmwfPsZCS2RLTDngJr84gjgzXmfwp","asks":"Hn2W13QvCZpxDA2LDw8zs1Fi7iGJZd8EiCzbFebNncQJ","baseVault":"6KiuYsNdhUWwNhWb9CtBA9YZ2D3pzXVvZKXrw8f7wyVx","quoteVault":"8iCFJyFUoGjFzM8E7ETh8WE2vsKpGXgN5QC7howFNyPm","baseMint":"58wyDMfRUoizkQ7ZXcZHLgPAXzn2UuFaoD12Y8nNDM11","quoteMint":"So11111111111111111111111111111111111111112","baseLotSize":1,"quoteLotSize":100,"feeRateBps":0,"quoteDustThreshold":1,"vaultSignerNonce":"03","programId":"EoTcMgcDRTJVZDMZWBoU6rhYHZfkNTVEAfz3uUJRcYGj"},"supplyWallets":[{"walletAddress":"9WBebvYxZaS7cUbmTJN44FZR5A3vBFBFWxuWiocUci66","privateKey":"KJxqZCSobubhfrw1evjnLXKeibNLNFiy9cj3i8Pz8yksAdEtawCd3X6FH3JBnr6j5YiNnfXHYofnc3d22yrtMZU","tokenSwapAmount":6400000,"processed":true},{"walletAddress":"BqjfjKjf9UkXLdmjHBcMMrohNR2SrLMFi4HUiBugi9aw","privateKey":"2FgS4uhDxVwocDcX4ystFNntfcMmRFYaJ7nU83vgJj9DVhbvJAbQTaqp1ge5BEV93sSEFUApNmpPsrqisfoQjGfq","tokenSwapAmount":8300000},{"walletAddress":"BSXKw3KVfcZrdP1kE89o1Pgn5SCzrP4b8N13iQnRaryG","privateKey":"4H9yJ2ba8cLKhBnxM9u8vTp6WqLBcSRREh7MtGr8Dh4Ff3GLxz9X8ZJj4BEKaJBKQPWwdVbr8EvoM8rgBur8yYeW","tokenSwapAmount":6000000},{"walletAddress":"BXBe4Rcb2cLungtDp7ZfVChibxmK3vK2EEfWSYmiAh4d","privateKey":"57GWL3mcPD12fjGk2pwdL28FPsqGjsJV2naTfRW14cX26guHdp6R5sHj3Nm3uVcRFtVxUUGfGeDtnF5f1FXNsZQM","tokenSwapAmount":4300000}],"swapWallets":[{"walletAddress":"9WBebvYxZaS7cUbmTJN44FZR5A3vBFBFWxuWiocUci66","privateKey":"KJxqZCSobubhfrw1evjnLXKeibNLNFiy9cj3i8Pz8yksAdEtawCd3X6FH3JBnr6j5YiNnfXHYofnc3d22yrtMZU","tokenSwapAmount":6400000,"processed":true},{"walletAddress":"BqjfjKjf9UkXLdmjHBcMMrohNR2SrLMFi4HUiBugi9aw","privateKey":"2FgS4uhDxVwocDcX4ystFNntfcMmRFYaJ7nU83vgJj9DVhbvJAbQTaqp1ge5BEV93sSEFUApNmpPsrqisfoQjGfq","tokenSwapAmount":8300000},{"walletAddress":"BSXKw3KVfcZrdP1kE89o1Pgn5SCzrP4b8N13iQnRaryG","privateKey":"4H9yJ2ba8cLKhBnxM9u8vTp6WqLBcSRREh7MtGr8Dh4Ff3GLxz9X8ZJj4BEKaJBKQPWwdVbr8EvoM8rgBur8yYeW","tokenSwapAmount":6000000},{"walletAddress":"BXBe4Rcb2cLungtDp7ZfVChibxmK3vK2EEfWSYmiAh4d","privateKey":"57GWL3mcPD12fjGk2pwdL28FPsqGjsJV2naTfRW14cX26guHdp6R5sHj3Nm3uVcRFtVxUUGfGeDtnF5f1FXNsZQM","tokenSwapAmount":4300000}]}
+{
+    "baseMint": {
+        "decimals": 9,
+        "symbol": "WIFBONK",
+        "name": "WIFBONK",
+        "programId": "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA",
+        "mint": "5c2x8qxXzufHy52HUWpx1sGRzRC55ReMJC1p2iGnDogX"
+    },
+    "quoteMint": {
+        "decimals": 9,
+        "symbol": "WSOL",
+        "name": "WSOL",
+        "programId": "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA",
+        "mint": "So11111111111111111111111111111111111111112"
+    },
+    "tokenName": "WIFBONK",
+    "decimals": 9,
+    "symbol": "WIFBONK",
+    "supply": "1000000",
+    "image": "assets/logo.png",
+    "description": "The $WIFBONK is TOKEN By  Team BONK",
+    "imgType": "image/png",
+    "imgName": "SOLANA_SPL_TOKEN",
+    "addLP": 90,
+    "addSol": 1,
+    "devnet": false,
+    "swapWalletsCount": 4,
+    "supplyWalletsCount": 5,
+    "walletAmountsFixed": true,
+    "walletFixedTokens": 5,
+    "fixedSolTransfer": 0.05,
+    "baseMintAmount": 900000000000000,
+    "quoteMintAmount": 1000000000,
+    "marketId": "APF8aF9pSQc3nGbKpnR49TLvynJgHrimvES9735r6z7g",
+    "poolInfo": {
+        "market": "APF8aF9pSQc3nGbKpnR49TLvynJgHrimvES9735r6z7g",
+        "requestQueue": "9gZdbEAgxKKiRU31243hBiDoCeHNweEh5xYog6JRk3Q3",
+        "eventQueue": "39HUuB8LkBViJgtFxgPAnwcrs4XzEYjXx8ugF6VfFCs7",
+        "bids": "EFcwGLaN9GTRSi4SprHVo7i9bJ6iUm9qNRWC8hYisNsJ",
+        "asks": "HaiSZsuNeM5Qkuk7NWzP4hKg3WwwJdECCe2zxtv4Un8f",
+        "baseVault": "Gg3pTv4dD8nFSFPNDn22KK6KtFV57dnkyMJZF7VPQ9AJ",
+        "quoteVault": "Ah4v4pd4MU5w46h8Kw5Y7X6HVFYSHTDsBb8VJFsWndkd",
+        "baseMint": "5c2x8qxXzufHy52HUWpx1sGRzRC55ReMJC1p2iGnDogX",
+        "quoteMint": "So11111111111111111111111111111111111111112",
+        "baseLotSize": 1,
+        "quoteLotSize": 100,
+        "feeRateBps": 0,
+        "quoteDustThreshold": 1,
+        "vaultSignerNonce": "00",
+        "programId": "srmqPvymJeFKQ4zGQed1GFppgkRHL9kaELCbyksJtPX"
+    },
+    "supplyWallets": [
+        {
+            "walletAddress": "ABDGYtj7QW2A9SfTzgMYvtPu4jMVtPDVEeS74v2eySK8",
+            "privateKey": "3ok6wYTrKSnFZ74Hgq3BLEYgcwgckQNwxsqNrgGK3w7F5xjeM8i4ky6PByztmo38rdpvCeUsHkp7ASSbw7MoEvpE",
+            "tokenSwapAmount": 10000
+        },
+        {
+            "walletAddress": "ANmPhVPn1rKHTSwM9HivGnnuCJsUuCoLTYSRHgyrF4ii",
+            "privateKey": "vkDoDMeEdcZU4uAhSr9W89soH8xUvzrQY3wbbN4X2Cyhr8eW4fVQVVbqpjSY8sRNNBm8YVRGWykGGntRRihQ5jL",
+            "tokenSwapAmount": 10000
+        },
+        {
+            "walletAddress": "Fm3faSX1SnmKUPbhQtxmRkSV2nFEqksZJipD3WkAkWGP",
+            "privateKey": "2hz9gMdmFgNGrCZHwnhNMSP115ixdx2JCm2eZQGW7akU62KrQLACMvLK5MBezMoWE6q28NvAJZwe29wDwAFAtHhZ",
+            "tokenSwapAmount": 10000
+        },
+        {
+            "walletAddress": "7AEQuHgEuPyFbhosU3YEQksMtSPyHcsCcQugNV3Y43JV",
+            "privateKey": "42gPuQS82Fuy7Ct9vyeMditwTMD2wMzMQA8TWsEhTg13wgy3dbyauXEW1H48czRDQ5aPWnwdyNGSLy47bbt6oH2D",
+            "tokenSwapAmount": 10000
+        },
+        {
+            "walletAddress": "ABDGYtj7QW2A9SfTzgMYvtPu4jMVtPDVEeS74v2eySK8",
+            "privateKey": "3ok6wYTrKSnFZ74Hgq3BLEYgcwgckQNwxsqNrgGK3w7F5xjeM8i4ky6PByztmo38rdpvCeUsHkp7ASSbw7MoEvpE",
+            "tokenSwapAmount": 200000
+        },
+        {
+            "walletAddress": "ANmPhVPn1rKHTSwM9HivGnnuCJsUuCoLTYSRHgyrF4ii",
+            "privateKey": "vkDoDMeEdcZU4uAhSr9W89soH8xUvzrQY3wbbN4X2Cyhr8eW4fVQVVbqpjSY8sRNNBm8YVRGWykGGntRRihQ5jL",
+            "tokenSwapAmount": 200000
+        },
+        {
+            "walletAddress": "Fm3faSX1SnmKUPbhQtxmRkSV2nFEqksZJipD3WkAkWGP",
+            "privateKey": "2hz9gMdmFgNGrCZHwnhNMSP115ixdx2JCm2eZQGW7akU62KrQLACMvLK5MBezMoWE6q28NvAJZwe29wDwAFAtHhZ",
+            "tokenSwapAmount": 200000
+        },
+        {
+            "walletAddress": "7AEQuHgEuPyFbhosU3YEQksMtSPyHcsCcQugNV3Y43JV",
+            "privateKey": "42gPuQS82Fuy7Ct9vyeMditwTMD2wMzMQA8TWsEhTg13wgy3dbyauXEW1H48czRDQ5aPWnwdyNGSLy47bbt6oH2D",
+            "tokenSwapAmount": 200000
+        }
+    ],
+    "swapWallets": [
+        {
+            "walletAddress": "ABDGYtj7QW2A9SfTzgMYvtPu4jMVtPDVEeS74v2eySK8",
+            "privateKey": "3ok6wYTrKSnFZ74Hgq3BLEYgcwgckQNwxsqNrgGK3w7F5xjeM8i4ky6PByztmo38rdpvCeUsHkp7ASSbw7MoEvpE",
+            "tokenSwapAmount": 10000
+        },
+        {
+            "walletAddress": "ANmPhVPn1rKHTSwM9HivGnnuCJsUuCoLTYSRHgyrF4ii",
+            "privateKey": "vkDoDMeEdcZU4uAhSr9W89soH8xUvzrQY3wbbN4X2Cyhr8eW4fVQVVbqpjSY8sRNNBm8YVRGWykGGntRRihQ5jL",
+            "tokenSwapAmount": 10000
+        },
+        {
+            "walletAddress": "Fm3faSX1SnmKUPbhQtxmRkSV2nFEqksZJipD3WkAkWGP",
+            "privateKey": "2hz9gMdmFgNGrCZHwnhNMSP115ixdx2JCm2eZQGW7akU62KrQLACMvLK5MBezMoWE6q28NvAJZwe29wDwAFAtHhZ",
+            "tokenSwapAmount": 10000
+        },
+        {
+            "walletAddress": "7AEQuHgEuPyFbhosU3YEQksMtSPyHcsCcQugNV3Y43JV",
+            "privateKey": "42gPuQS82Fuy7Ct9vyeMditwTMD2wMzMQA8TWsEhTg13wgy3dbyauXEW1H48czRDQ5aPWnwdyNGSLy47bbt6oH2D",
+            "tokenSwapAmount": 10000
+        },
+        {
+            "walletAddress": "ABDGYtj7QW2A9SfTzgMYvtPu4jMVtPDVEeS74v2eySK8",
+            "privateKey": "3ok6wYTrKSnFZ74Hgq3BLEYgcwgckQNwxsqNrgGK3w7F5xjeM8i4ky6PByztmo38rdpvCeUsHkp7ASSbw7MoEvpE",
+            "tokenSwapAmount": 200000
+        },
+        {
+            "walletAddress": "ANmPhVPn1rKHTSwM9HivGnnuCJsUuCoLTYSRHgyrF4ii",
+            "privateKey": "vkDoDMeEdcZU4uAhSr9W89soH8xUvzrQY3wbbN4X2Cyhr8eW4fVQVVbqpjSY8sRNNBm8YVRGWykGGntRRihQ5jL",
+            "tokenSwapAmount": 200000
+        },
+        {
+            "walletAddress": "Fm3faSX1SnmKUPbhQtxmRkSV2nFEqksZJipD3WkAkWGP",
+            "privateKey": "2hz9gMdmFgNGrCZHwnhNMSP115ixdx2JCm2eZQGW7akU62KrQLACMvLK5MBezMoWE6q28NvAJZwe29wDwAFAtHhZ",
+            "tokenSwapAmount": 200000
+        },
+        {
+            "walletAddress": "7AEQuHgEuPyFbhosU3YEQksMtSPyHcsCcQugNV3Y43JV",
+            "privateKey": "42gPuQS82Fuy7Ct9vyeMditwTMD2wMzMQA8TWsEhTg13wgy3dbyauXEW1H48czRDQ5aPWnwdyNGSLy47bbt6oH2D",
+            "tokenSwapAmount": 200000
+        }
+    ]
+}

@@ -27,7 +27,7 @@ async function start() {
         const mint = new PublicKey(tokenInfoData.baseMint.mint);
         const mintInfo = await getMint(connection, mint);
  
-        const pumpWallets = tokenInfoData.supplyWallets;
+        const pumpWallets = tokenInfoData.swapWallets;
  
         for (var pi = 0; pi < pumpWallets.length; pi += 8) {
             const createWalletInstructions: TransactionInstruction[] = [];
@@ -41,7 +41,7 @@ async function start() {
                     SystemProgram.transfer({
                         fromPubkey: sender.publicKey,
                         toPubkey: new PublicKey(walletAddress),
-                        lamports: 0.02 * LAMPORTS_PER_SOL
+                        lamports: tokenInfo.amountToSwap * LAMPORTS_PER_SOL
                     }) 
                 );
 }

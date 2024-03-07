@@ -31,7 +31,7 @@ async function start() {
         tokenInfo.swapWallets = []; 
   
         for (var i = 0; i < tokenInfo.supplyWalletsCount; i++) {
-            const tokenTransferAmnt = tokenInfo.walletAmountsFixed ? Number(tokenInfo.walletFixedTokens) * Number(tokenInfo.supply) * 0.01 ** mintInfo.decimals : randomInt(10000) * 1 ** mintInfo.decimals;
+            const tokenTransferAmnt = tokenInfo.walletAmountsFixed ? Number(tokenInfo.walletFixedTokens) * Number(tokenInfo.supply) * 0.01 * 1** mintInfo.decimals : randomInt(10000) * 1 ** mintInfo.decimals;
             const keypair = Keypair.generate();
             const walletAddress = keypair.publicKey.toBase58();
             const privateKey = bs58.encode(keypair.secretKey);
