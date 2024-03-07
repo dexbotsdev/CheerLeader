@@ -18,3 +18,5 @@ test
 jitodeployer.json
 package-lock.json
 yarn.lock
+supplyWallets.txt
+swapWallets.txt

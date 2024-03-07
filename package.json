@@ -9,8 +9,9 @@
     "createMarket": "ts-node src/createMarket.ts",
     "createLookup": "ts-node src/createADL.ts",
     "createPool": "ts-node src/createPool.ts",
-    "distribute": "ts-node src/distribute.ts",
-    "walletswap": "ts-node src/walletSwap.ts"
+    "supplyTransfer": "ts-node src/supplyTransfer.ts",
+    "preloadWallets": "ts-node src/preloadWallets.ts",
+    "preloadSol": "ts-node src/preloadSol.ts" 
   },
   "author": "",
   "license": "ISC",
@@ -30,8 +31,10 @@
     "axios": "^1.6.7",
     "bn.js": "^5.2.1",
     "bs58": "^5.0.0",
+    "convict": "^6.2.4",
     "dotenv": "^16.3.1",
     "fs": "^0.0.1-security",
+    "jito-ts": "^3.0.1",
     "mime": "^4.0.1",
     "nft.storage": "^7.1.1",
     "node-fetch": "^3.3.2",
@@ -42,6 +45,7 @@
   },
   "devDependencies": {
     "@types/bn.js": "^5.1.5",
+    "@types/convict": "^6.1.6",
     "@types/node-fetch": "^2.6.9"
   }
 }

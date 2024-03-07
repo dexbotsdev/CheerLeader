@@ -79,29 +79,18 @@ export async function getTokenBalance(tokenMintAddress: PublicKey,wallet: Keypai
   }
 } 
 
-export const transferSPL = async (tokenMintAddress: string, amount: string, destAddress: string, txWallet: Keypair) => {
+export const transferSPL = async (tokenMintAddress: string, amount: string, destAddress: string, txWallet: Keypair,fromTokenAccount:any) => {
 
-  console.log('WWallet -- 1 '+destAddress);
+  console.log('Wallet - '+destAddress); 
+  const mintPubkey = new PublicKey(tokenMintAddress);  
+  const destPubkey = new PublicKey(destAddress); 
 
-
-  const mintPubkey = new PublicKey(tokenMintAddress);
-
-  console.log('WWallet -- 2 '+mintPubkey);
-
-
-  const destPubkey = new PublicKey(destAddress);
-
-  console.log('WWallet -- 3 '+destPubkey);
-
-
-  const fromTokenAccount = await getOrCreateAssociatedTokenAccount(connection, txWallet, mintPubkey, txWallet.publicKey);
   const tokenAccountBalance = await connection.getTokenAccountBalance(fromTokenAccount.address);
   if (tokenAccountBalance) {
       const decimals = tokenAccountBalance.value.decimals;
       const toTokenAccount = await getOrCreateAssociatedTokenAccount(connection, txWallet, mintPubkey, destPubkey);
 
-      console.log( amount +":"+ Math.floor(Number(amount) * 10 ** decimals)+":"+ decimals)
-      const transaction = new Transaction().add(
+       const transactionInstruction =  
           createTransferCheckedInstruction(
               fromTokenAccount.address,
               mintPubkey,
@@ -109,10 +98,8 @@ export const transferSPL = async (tokenMintAddress: string, amount: string, dest
               txWallet.publicKey,
               Math.floor(Number(amount) * 10 ** decimals),
               decimals
-          )
-      );
-      const txhash = await connection.sendTransaction(transaction, [txWallet]);
-      return txhash;
+          ) 
+      return   transactionInstruction;
   }
-  return false;
+  return null;
 };

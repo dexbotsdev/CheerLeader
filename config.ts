@@ -15,17 +15,11 @@ export const tokenInfo={
     addLP: 90, //%ge of supply tokens
     addSol: 1,  
     devnet:true,
-    walletCount:20,
+    swapWalletsCount:5,
+    supplyWalletsCount:20,
     walletAmountsFixed :false,
-    walletFixedTokens: 0.1, //%ge of supply tokens -- Only if its fixed
-    fixedSolTransfer:0.01,  // sols to transfer to wallets
-    wallets:[
-        {
-            amountToSwap:0.01,
-            privateKey:keyArray
-        }
-
-    ]
+    walletFixedTokens: 0.5, //%ge of supply tokens -- Only if its fixed
+    fixedSolTransfer:0.01
 }
 
  
