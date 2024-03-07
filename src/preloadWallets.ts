@@ -48,8 +48,7 @@ async function start() {
                     txnInst
                 );
 
-                pumpWallets[pi * i].processed = true;
-
+ 
             }
 
             const tipIxn = SystemProgram.transfer({

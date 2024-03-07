@@ -6,12 +6,11 @@
   "scripts": {
     "start": "ts-node src/tokenMint.ts",
     "revokeToken": "ts-node src/revokeToken.ts",
-    "createMarket": "ts-node src/createMarket.ts",
-    "createLookup": "ts-node src/createADL.ts",
-    "createPool": "ts-node src/createPool.ts",
-    "supplyTransfer": "ts-node src/supplyTransfer.ts",
+    "createMarket": "ts-node src/createMarket.ts", 
+    "createPool": "ts-node src/jitoPool.ts",
+    "genWallets": "ts-node src/genWallets.ts",
     "preloadWallets": "ts-node src/preloadWallets.ts",
-    "preloadSol": "ts-node src/preloadSol.ts" 
+    "preloadSol": "ts-node src/preloadSol.ts"
   },
   "author": "",
   "license": "ISC",

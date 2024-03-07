@@ -15,7 +15,7 @@ export const tokenInfo={
     addLP: 90, //%ge of supply tokens
     addSol: 1,  
     devnet:true,
-    swapWalletsCount:5,
+    swapWalletsCount:4,   // bundle limit of jito is 5  including tips, so limit swap wallets to 4
     supplyWalletsCount:20,
     walletAmountsFixed :false,
     walletFixedTokens: 0.5, //%ge of supply tokens -- Only if its fixed

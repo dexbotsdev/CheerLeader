@@ -40,8 +40,7 @@ async function start() {
                 walletAddress: walletAddress,
                 privateKey: privateKey,
                 tokenAmount: tokenTransferAmnt,
-                solAmount : tokenInfo.fixedSolTransfer,
-                processed:false
+                solAmount : tokenInfo.fixedSolTransfer, 
             })
 
         }
@@ -53,8 +52,7 @@ async function start() {
             tokenInfo.swapWallets.push({
                 walletAddress: walletAddress,
                 privateKey: privateKey,
-                tokenSwapAmount: randomInt(100)*1e5,
-                processed:false
+                tokenSwapAmount: randomInt(100)*1e5, 
             })
 
         }
