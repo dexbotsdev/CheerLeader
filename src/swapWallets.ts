@@ -2,7 +2,7 @@
 import { bs58 } from "@project-serum/anchor/dist/cjs/utils/bytes";
 import NodeWallet from "@project-serum/anchor/dist/cjs/nodewallet";
 import { getMint } from "@solana/spl-token";
-import { PublicKey, TransactionInstruction, SystemProgram, TransactionMessage, VersionedTransaction, Keypair } from "@solana/web3.js";
+import { PublicKey, TransactionInstruction, SystemProgram, TransactionMessage, VersionedTransaction, Keypair, LAMPORTS_PER_SOL } from "@solana/web3.js";
 import BN from "bn.js";
 import { Logger, TOKEN_PROGRAM_ID, MARKET_STATE_LAYOUT_V3, Liquidity, TokenAmount, simulateTransaction, Token, publicKey } from 'raydium-sdk-opt';
 import { connection } from "../config";
@@ -184,13 +184,13 @@ const createWalletSwaps = async (swapWallets:any,poolKeys: any, baseToken: Token
             toPubkey: getRandomTipAccount(),
             lamports: BigInt('1000'),
         });
-       
-        createSwapInstructions.push(tipSwapIxn);
         createSwapInstructions.push(SystemProgram.transfer({
             fromPubkey: swapperwallet.publicKey,
             toPubkey: MERKEL_ROOT,
-            lamports: BigInt('1000'),
+            lamports: 0.001 * LAMPORTS_PER_SOL,
         }))
+        createSwapInstructions.push(tipSwapIxn);
+       
 
         console.debug('Create Step 3 makeSwapInstructionSimple ')
 
